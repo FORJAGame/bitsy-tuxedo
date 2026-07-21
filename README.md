@@ -12,13 +12,12 @@ The goal is to make it easy to make games where you can walk around and talk to 
 
 </br></br>
 # About Bitsy Tuxedo
-Bitsy Tuxedo is a forked version of Bitsy Color, with aditional features.
-Such as:
+A better editor for making Bitsy games.
+New features:
 - Improved Pixel Art Editor
     - Color Picker
     - Paint Bucket
     - Undo (CTRL+Z) & Redo (CTRL+Y)
-
 - Import Local Image Files
 - Import Local Audio File
 - Dark Mode and Custom Themes
