@@ -1097,6 +1097,10 @@ function start() {
 		document.getElementById("pageColor").value = export_settings.page_color;
 	}
 
+	// load gamepad port setting
+	gamepadPortEnabled = Store.get('gamepad_port_enabled', false);
+	document.getElementById("gamepadPortCheck").checked = gamepadPortEnabled;
+
 	// TODO : interesting idea but needs work!
 	// // try to honor state of all checkboxes from previous session
 	// var inputElements = document.getElementsByTagName("input");
@@ -1630,9 +1634,15 @@ function on_play_mode() {
 	// todo : I feel likef I need to take a look at the font manager and simplify things there
 	loadGame(roomTool.canvasElement, getFullGameData(), fontManager.GetData(defaultFontName));
 	if (typeof startRoomAudio !== "undefined") startRoomAudio(state.room);
+	if (gamepadPortEnabled) {
+		applyGamepadHack();
+	}
 }
 
 function on_edit_mode() {
+	if (isGamepadHackActive) {
+		removeGamepadHack();
+	}
 	isPlayMode = false;
 	applyTint(hexToHue(_editTintHex));
 	if (typeof stopRoomAudio !== "undefined") stopRoomAudio();
@@ -2159,7 +2169,8 @@ function exportGame() {
 		export_settings.page_color,
 		filenameFromGameTitle() + ".html",
 		isFixedSize,
-		size);
+		size,
+		gamepadPortEnabled ? GamepadHackScript : null);
 }
 
 function exportGameData() {
@@ -2971,6 +2982,77 @@ function on_paint_frame2() {
 var export_settings = {
 	page_color : "#ffffff"
 };
+
+var gamepadPortEnabled = false;
+var isGamepadHackActive = false;
+var originalUpdateInput = null;
+var originalBitsyUpdate = null;
+
+function toggleGamepadPort(e) {
+	gamepadPortEnabled = e.target.checked;
+	Store.set('gamepad_port_enabled', gamepadPortEnabled);
+
+	if (isPlayMode) {
+		if (gamepadPortEnabled) {
+			applyGamepadHack();
+		} else {
+			removeGamepadHack();
+		}
+	}
+}
+
+function applyGamepadHack() {
+	if (isGamepadHackActive) return;
+
+	if (window.kitsy) {
+		window.kitsy.queuedInjectScripts = [];
+		window.kitsy.queuedBeforeScripts = {};
+		window.kitsy.queuedAfterScripts = {};
+	}
+
+	if (typeof updateInput === 'function') {
+		originalUpdateInput = updateInput;
+	}
+	if (bitsy && typeof bitsy._update === 'function') {
+		originalBitsyUpdate = bitsy._update;
+	}
+
+	var script = document.createElement('script');
+	script.id = 'gamepadHackEditorScript';
+	script.textContent = GamepadHackScript;
+	document.head.appendChild(script);
+
+	if (window.kitsy) {
+		window.kitsy.applyInjects();
+		window.kitsy.applyHooks();
+	}
+
+	isGamepadHackActive = true;
+}
+
+function removeGamepadHack() {
+	if (!isGamepadHackActive) return;
+
+	var script = document.getElementById('gamepadHackEditorScript');
+	if (script) {
+		script.remove();
+	}
+
+	if (originalUpdateInput) {
+		window.updateInput = originalUpdateInput;
+		originalUpdateInput = null;
+	}
+	if (originalBitsyUpdate && bitsy) {
+		bitsy._update = originalBitsyUpdate;
+		originalBitsyUpdate = null;
+	}
+
+	if (window.kitsy) {
+		window.kitsy.hooked = false;
+	}
+
+	isGamepadHackActive = false;
+}
 
 function on_change_color_page() {
 	var hex = document.getElementById("pageColor").value;
