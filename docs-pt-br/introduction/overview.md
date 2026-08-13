@@ -1,6 +1,6 @@
 # Visão Geral
 
-O Bitsy apresenta suas ferramentas como um conjunto de painéis ("cards") num espaço de trabalho, com uma barra de ferramentas no topo pra mostrar ou esconder cada um. Os jogos são feitos de **cômodos** interconectados — grades fixas de 16×16 tiles — pelos quais seu **avatar** anda, conversando com **sprites**, pegando **itens** e passando por **saídas** pra outros cômodos.
+O Bitsy apresenta suas ferramentas como um conjunto de painéis ("cards") num espaço de trabalho, com uma barra de ferramentas no topo pra mostrar ou esconder cada um. Os jogos são feitos de **salas** interconectados — grades fixas de 16×16 tiles — pelos quais seu **avatar** anda, conversando com **sprites**, pegando **itens** e passando por **saídas** pra outros salas.
 
 Você pode testar seu jogo a qualquer momento e entregar o resultado como um único arquivo HTML autocontido que roda em qualquer navegador — sem precisar de servidor ou instalação.
 
@@ -23,10 +23,10 @@ Dentro do painel Paint especificamente, o Tuxedo também adiciona uma fileira ex
 
 ## Vocabulário essencial
 
-- **Avatar** — o objeto que o jogador controla. Todo jogo tem exatamente um desenho de avatar, embora um cômodo possa trocar por um sprite diferente como o "jogador" se você quiser.
+- **Avatar** — o objeto que o jogador controla. Todo jogo tem exatamente um desenho de avatar, embora um sala possa trocar por um sprite diferente como o "jogador" se você quiser.
 - **Sprite** — um objeto que o avatar pode esbarrar pra disparar diálogo. Cada sprite colocado no mundo é uma instância distinta, mesmo que dois sprites compartilhem o mesmo desenho.
 - **Tile** — cenário não interativo. Tiles podem opcionalmente ser marcados como "parede", o que bloqueia o avatar de andar sobre eles.
 - **Item** — um colecionável; esbarrar em um adiciona ele ao inventário e pode disparar diálogo.
-- **Exit (saída)** — uma passagem entre dois pontos, possivelmente em cômodos diferentes (veja [Saídas & Finais](../tools/exitsandendings.md)).
+- **Exit (saída)** — uma passagem entre dois pontos, possivelmente em salas diferentes (veja [Saídas & Finais](../tools/exitsandendings.md)).
 
 Veja o [Glossário](../glossary.md) pras definições resumidas.

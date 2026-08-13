@@ -18,4 +18,4 @@
 5. Salve como rascunho e visualize a página. O editor de tema do itch (ou edição de HTML puro, pelo painel do projeto) permite customizar a página ao redor.
 6. Quando estiver satisfeito com tudo no painel, mude a visibilidade de rascunho pra público.
 
-Lembrete da página de [Music](../tools/music.md): se algum cômodo usa um arquivo de áudio importado em vez de uma música composta, essa música **não** vai tocar no jogo enviado — só músicas compostas são incluídas na exportação.
+Lembrete da página de [Music](../tools/music.md): se algum sala usa um arquivo de áudio importado em vez de uma música composta, essa música **não** vai tocar no jogo enviado — só músicas compostas são incluídas na exportação.

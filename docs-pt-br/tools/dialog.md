@@ -37,4 +37,4 @@ Tanto o nome interno do desenho quanto seu id numérico funcionam.
 
 ## Além do texto
 
-O script de diálogo também cobre lógica condicional e ações que mudam de cômodo, tocam sons, ou modificam itens/variáveis — essas são escritas diretamente na visualização de código. Veja [Advanced Topics: Scripting](../advancedTopics/scripting.md) pra algumas dicas, e [FAQ: locked door](../faq/lockedDoor.md) pra um exemplo prático que combina uma condição com um cadeado de saída.
+O script de diálogo também cobre lógica condicional e ações que mudam de sala, tocam sons, ou modificam itens/variáveis — essas são escritas diretamente na visualização de código. Veja [Advanced Topics: Scripting](../advancedTopics/scripting.md) pra algumas dicas, e [FAQ: locked door](../faq/lockedDoor.md) pra um exemplo prático que combina uma condição com um cadeado de saída.

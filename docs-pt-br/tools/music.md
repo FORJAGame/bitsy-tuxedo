@@ -6,7 +6,7 @@ Abra Music e alterne entre suas três abas:
 
 ## Tune
 
-Componha música de fundo em loop pra um cômodo, ou um jingle disparado a partir do diálogo.
+Componha música de fundo em loop pra um sala, ou um jingle disparado a partir do diálogo.
 
 - **Identificação / navegação de tune** — nomeie uma tune, avance entre as existentes.
 - **New / duplicate / delete (novo / duplicar / deletar)** — os controles usuais de gerenciamento.
@@ -18,7 +18,7 @@ Componha música de fundo em loop pra um cômodo, ou um jingle disparado a parti
 - **Menu Instrument (instrumento)** — escolha um tom de onda pulso (P2/P4/P8) independentemente pra melodia e harmonia.
 - **Menu Style (estilo)** — tempo (4 presets, 60–160 bpm), clima (maior/menor, que transpõe as notas automaticamente) e tom (de uma escala pentatônica simples até cromática completa).
 
-Uma tune é atribuída a um cômodo como música de fundo através do menu suspenso de música da ferramenta [Room](room.md).
+Uma tune é atribuída a um sala como música de fundo através do menu suspenso de música da ferramenta [Room](room.md).
 
 ## Blip
 
@@ -32,17 +32,17 @@ Efeitos sonoros curtos — coleta de itens, "cumprimentos" de sprites, blips de 
 
 ## Audio (Bitsy Tuxedo)
 
-Importe seus próprios arquivos de áudio — mp3, wav, ogg, flac, aac, ou m4a — e use-os como música de fundo de um cômodo, em vez de compor uma chiptune.
+Importe seus próprios arquivos de áudio — mp3, wav, ogg, flac, aac, ou m4a — e use-os como música de fundo de um sala, em vez de compor uma chiptune.
 
 - Clique em **import audio**, e escolha um ou mais arquivos de uma vez.
 - Cada arquivo importado ganha uma linha: um nome de exibição editável, uma pré-visualização de tocar/parar, e um botão de deletar.
-- Atribua um arquivo importado a um cômodo através do menu suspenso de música da ferramenta [Room](room.md) — ele aparece na mesma lista que suas tunes compostas, junto com uma opção "off".
+- Atribua um arquivo importado a um sala através do menu suspenso de música da ferramenta [Room](room.md) — ele aparece na mesma lista que suas tunes compostas, junto com uma opção "off".
 
 ### Limitação importante: só pré-visualização, não exportado
 
 **Áudio importado só toca dentro do próprio botão de Play-test do editor.** Ele fica armazenado no seu navegador (não dentro dos dados de salvamento/exportação do jogo), e o HTML do jogo exportado/baixado não inclui o código de reprodução de áudio nem os arquivos de áudio de forma alguma. Isso significa que:
 
-- Se você exportar seu jogo e abrir ele de forma independente (dando duplo clique no HTML, ou hospedando no itch.io), qualquer cômodo usando áudio importado como sua "música" vai ficar **silencioso** — a configuração de música do cômodo silenciosamente não faz nada pro áudio importado fora do editor.
-- Áudio importado e atribuições de música de cômodo ficam no armazenamento local do seu navegador. Limpar dados do site, usar um navegador diferente, ou abrir seu arquivo de projeto num computador diferente vai perder essas atribuições (o arquivo de jogo subjacente em si nunca é tocado — `room.tune` continua `null` pra um cômodo usando áudio importado, então não há nada a "perder" do ponto de vista do arquivo salvo, mas também não há nada a recuperar).
+- Se você exportar seu jogo e abrir ele de forma independente (dando duplo clique no HTML, ou hospedando no itch.io), qualquer sala usando áudio importado como sua "música" vai ficar **silencioso** — a configuração de música do sala silenciosamente não faz nada pro áudio importado fora do editor.
+- Áudio importado e atribuições de música de sala ficam no armazenamento local do seu navegador. Limpar dados do site, usar um navegador diferente, ou abrir seu arquivo de projeto num computador diferente vai perder essas atribuições (o arquivo de jogo subjacente em si nunca é tocado — `room.tune` continua `null` pra um sala usando áudio importado, então não há nada a "perder" do ponto de vista do arquivo salvo, mas também não há nada a recuperar).
 
 Se você precisa de música no jogo final de fato lançado, componha ela como uma [Tune](#tune) em vez disso — tunes são incorporadas no formato de música nativo da engine do jogo e são exportadas e tocadas corretamente em todo lugar. Trate a aba Audio como uma forma de pré-visualizar uma ideia de faixa contra seu jogo enquanto você trabalha, não como uma forma de lançar uma.

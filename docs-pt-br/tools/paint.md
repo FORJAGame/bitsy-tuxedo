@@ -10,7 +10,7 @@ Todo desenho é uma grade quadrada de tamanho fixo (o mesmo tamanho pra todo des
 - **Avatares, sprites e itens** usam a *cor de sprite* da paleta como primeiro plano.
 - Células vazias sempre mostram a *cor de fundo*.
 
-(As cores de primeiro plano/fundo vêm da paleta do cômodo atual — veja [Colors](color.md). Um desenho também pode usar qualquer uma das cores adicionais da paleta além dessas duas, se a paleta tiver mais de três.)
+(As cores de primeiro plano/fundo vêm da paleta do sala atual — veja [Colors](color.md). Um desenho também pode usar qualquer uma das cores adicionais da paleta além dessas duas, se a paleta tiver mais de três.)
 
 ## Ferramentas de desenho (Bitsy Tuxedo)
 
@@ -36,7 +36,7 @@ Em vez de desenhar uma grade de pixels à mão, você pode importar um arquivo d
 
 Importar sempre **cria um tile/sprite/item totalmente novo** — não sobrescreve o desenho que você tem aberto no momento, mesmo que esse desenho seja do mesmo tipo. O novo desenho é adicionado ao final da sua lista (tile, sprite, ou item) e imediatamente selecionado pra que você veja o resultado.
 
-A imagem é redimensionada (vizinho mais próximo, sem suavização) pra grade de pixels do desenho, e todo pixel opaco é comparado com a paleta atual do cômodo — correspondências exatas de cor reaproveitam um slot de paleta existente, e cores sem correspondência são adicionadas como novas cores da paleta. Pixels com transparência (alpha) abaixo de 50% viram transparentes/fundo.
+A imagem é redimensionada (vizinho mais próximo, sem suavização) pra grade de pixels do desenho, e todo pixel opaco é comparado com a paleta atual do sala — correspondências exatas de cor reaproveitam um slot de paleta existente, e cores sem correspondência são adicionadas como novas cores da paleta. Pixels com transparência (alpha) abaixo de 50% viram transparentes/fundo.
 
 Paletas têm um limite de 64 cores. Se uma importação precisasse de mais cores distintas do que as que restam, você vai receber um prompt de confirmação: prosseguir mapeia as cores extras pra correspondência de paleta existente mais próxima em vez de adicioná-las (com alguma perda de fidelidade de cor, mas a importação ainda se completa); cancelar aborta a importação pra que você possa simplificar a imagem primeiro.
 

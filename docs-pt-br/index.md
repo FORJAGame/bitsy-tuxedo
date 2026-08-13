@@ -15,7 +15,7 @@ Se você vem do Bitsy / Bitsy Color normal, aqui está a lista completa das muda
 | Ferramenta Paint | Pincel / Borracha / Preencher (balde) / Conta-gotas como ferramentas explícitas, além de Desfazer (`Ctrl+Z`) / Refazer (`Ctrl+Y`) | [Paint](tools/paint.md) |
 | Ferramenta Paint | Importe um arquivo de imagem local direto pra um desenho de tile/sprite/item | [Paint](tools/paint.md), [Importando Assets](faq/importingAssets.md) |
 | Ferramenta Colors | Paletas agora podem ter um botão "+" / "−" pra adicionar ou remover cores (3–64 cores), em vez de só adicionar | [Colors](tools/color.md) |
-| Ferramenta Music | Tune e Blip agora são abas dentro de um painel combinado **Music**, além de uma nova aba **Audio** pra importar arquivos de áudio externos (mp3/wav/ogg/flac/aac/m4a) como música de cômodo | [Music](tools/music.md) |
+| Ferramenta Music | Tune e Blip agora são abas dentro de um painel combinado **Music**, além de uma nova aba **Audio** pra importar arquivos de áudio externos (mp3/wav/ogg/flac/aac/m4a) como música de sala | [Music](tools/music.md) |
 | Ferramenta Theme | Painel novo: alternância de modo escuro + cores de destaque customizadas pra edição/jogo, lembradas por navegador | [Theme](tools/theme.md) |
 | Idioma | Tradução de Português Brasileiro (`pt-BR`) adicionada, distinta da tradução já existente de Português Europeu (`pt`) | [Game](tools/game.md) |
 
