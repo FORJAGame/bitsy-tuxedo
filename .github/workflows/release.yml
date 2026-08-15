@@ -6,36 +6,71 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: release-prod
+  cancel-in-progress: true
+
+env:
+  # Document Root do subdomínio tuxedo.forjagame.com.
+  REMOTE_DIR: ~/public_html/tuxedo
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      # setup
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
 
-      # build resources
-      - run: node ./dev/icon_generator/makeicons
-      - run: node ./dev/resource_packager
+      # ---------- build ----------
+      - name: Gerar ícones
+        run: node ./dev/icon_generator/makeicons
 
-      # publish
-      # TODO: cleaner version number
-      - name: get version
+      - name: Empacotar recursos
+        run: node ./dev/resource_packager
+
+      - name: Versão
         id: version
         run: |
-          echo ::set-output name=current-version::$(cat ./editor/script/engine/bitsy.js | grep -oP '(?<=major: )\d+').$(cat ./editor/script/engine/bitsy.js | grep -oP '(?<=minor: )\d+')
-      # - name: publish to itch.io
-      #   uses: josephbmanley/butler-publish-itchio-action@v1.0.3
-      #   env:
-      #     BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-      #     CHANNEL: win-linux-mac-stable
-      #     ITCH_GAME: bitsy
-      #     ITCH_USER: ledoux
-      #     PACKAGE: editor
-      #     VERSION: ${{ steps.version.outputs.current-version }}
+          MAJOR=$(grep -oP '(?<=major: )\d+' ./editor/script/engine/bitsy.js)
+          MINOR=$(grep -oP '(?<=minor: )\d+' ./editor/script/engine/bitsy.js)
+          echo "current-version=${MAJOR}.${MINOR}" >> "$GITHUB_OUTPUT"
 
-      - name: install expect
-        run: sudo apt install expect
+      - name: Verificar artefatos do build
+        run: |
+          test -f editor/index.html || (echo "editor/index.html não encontrado" && exit 1)
+          test -f editor/script/generated/resources.js || (echo "resources.js não foi gerado" && exit 1)
+          echo "Build OK — versão ${{ steps.version.outputs.current-version }}"
 
-      # - name: publish to bitsy.org 
-      #   run: expect -c 'spawn sftp ${{ secrets.FTP_USER }}@${{ secrets.FTP_SERVER }} ; sleep 10 ; send "yes\r" ; expect "password:" ; send "${{ secrets.FTP_PASS }}\r" ; expect "sftp>" ; send "put -r editor/\r" ; expect "sftp>" ; send "bye\r" ; expect eof'
+      # ---------- deploy ----------
+      - name: Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Testar conexão
+        run: |
+          ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy -o BatchMode=yes \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "echo 'SSH OK'; ls -d ${{ env.REMOTE_DIR }} || echo 'ATENÇÃO: REMOTE_DIR não existe'"
+
+      # Rode uma vez com este step habilitado antes de valer de verdade.
+      # Ele lista o que seria enviado e apagado, sem alterar nada.
+      - name: Dry run
+        run: |
+          rsync -avz --delete --dry-run \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_deploy -o BatchMode=yes" \
+            --exclude='.well-known/' \
+            --exclude='cgi-bin/' \
+            --exclude='.htaccess' \
+            ./editor/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_DIR }}/"
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_deploy -o BatchMode=yes" \
+            --exclude='.well-known/' \
+            --exclude='cgi-bin/' \
+            --exclude='.htaccess' \
+            ./editor/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_DIR }}/"
