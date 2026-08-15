@@ -54,18 +54,18 @@ jobs:
           ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
 
       # Teste
-      - name: Dry run
-        run: |
-          KEY="$HOME/.ssh/id_deploy"
-          lftp -c "
-            set sftp:connect-program 'ssh -a -x -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -i $KEY';
-            open -u ${{ secrets.SSH_USER }}, sftp://${{ secrets.SSH_HOST }};
-            mirror --reverse --delete --dry-run --verbose --no-perms \
-                   --exclude-glob .well-known/ \
-                   --exclude-glob cgi-bin/ \
-                   --exclude-glob .htaccess \
-                   ./editor/ ${{ env.REMOTE_DIR }};
-          "
+      # - name: Dry run
+      #   run: |
+      #     KEY="$HOME/.ssh/id_deploy"
+      #     lftp -c "
+      #       set sftp:connect-program 'ssh -a -x -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -i $KEY';
+      #       open -u ${{ secrets.SSH_USER }}, sftp://${{ secrets.SSH_HOST }};
+      #       mirror --reverse --delete --dry-run --verbose --no-perms \
+      #              --exclude-glob .well-known/ \
+      #              --exclude-glob cgi-bin/ \
+      #              --exclude-glob .htaccess \
+      #              ./editor/ ${{ env.REMOTE_DIR }};
+      #     "
 
       - name: Deploy via SFTP
         run: |
