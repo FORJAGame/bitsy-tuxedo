@@ -1,5 +1,7 @@
 name: release
 
+# Deploy via SFTP com lftp
+
 on:
   push:
     branches:
@@ -11,8 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Document Root do subdomínio tuxedo.forjagame.com.
-  REMOTE_DIR: ~/public_html/tuxedo
+  REMOTE_DIR: public_html/tuxedo
 
 jobs:
   release:
@@ -42,6 +43,9 @@ jobs:
           echo "Build OK — versão ${{ steps.version.outputs.current-version }}"
 
       # ---------- deploy ----------
+      - name: Instalar lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
       - name: Configurar chave SSH
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -49,28 +53,31 @@ jobs:
           chmod 600 ~/.ssh/id_deploy
           ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
 
-      - name: Testar conexão
-        run: |
-          ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy -o BatchMode=yes \
-            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-            "echo 'SSH OK'; ls -d ${{ env.REMOTE_DIR }} || echo 'ATENÇÃO: REMOTE_DIR não existe'"
-
-      # Rode uma vez com este step habilitado antes de valer de verdade.
-      # Ele lista o que seria enviado e apagado, sem alterar nada.
+      # Teste
       - name: Dry run
         run: |
-          rsync -avz --delete --dry-run \
-            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_deploy -o BatchMode=yes" \
-            --exclude='.well-known/' \
-            --exclude='cgi-bin/' \
-            --exclude='.htaccess' \
-            ./editor/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_DIR }}/"
+          KEY="$HOME/.ssh/id_deploy"
+          lftp -c "
+            set sftp:connect-program 'ssh -a -x -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -i $KEY';
+            open -u ${{ secrets.SSH_USER }}, sftp://${{ secrets.SSH_HOST }};
+            mirror --reverse --delete --dry-run --verbose --no-perms \
+                   --exclude-glob .well-known/ \
+                   --exclude-glob cgi-bin/ \
+                   --exclude-glob .htaccess \
+                   ./editor/ ${{ env.REMOTE_DIR }};
+          "
 
-      - name: Deploy via rsync
+      - name: Deploy via SFTP
         run: |
-          rsync -avz --delete \
-            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_deploy -o BatchMode=yes" \
-            --exclude='.well-known/' \
-            --exclude='cgi-bin/' \
-            --exclude='.htaccess' \
-            ./editor/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_DIR }}/"
+          KEY="$HOME/.ssh/id_deploy"
+          lftp -c "
+            set sftp:connect-program 'ssh -a -x -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -i $KEY';
+            set net:max-retries 2;
+            set net:timeout 20;
+            open -u ${{ secrets.SSH_USER }}, sftp://${{ secrets.SSH_HOST }};
+            mirror --reverse --delete --verbose --parallel=4 --no-perms \
+                   --exclude-glob .well-known/ \
+                   --exclude-glob cgi-bin/ \
+                   --exclude-glob .htaccess \
+                   ./editor/ ${{ env.REMOTE_DIR }};
+          "
