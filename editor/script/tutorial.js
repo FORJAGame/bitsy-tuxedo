@@ -48,6 +48,10 @@ var TutorialTour = (function () {
 		tutorial_step_paint_body:      "Draw tiles, sprites, items and your avatar. Tuxedo adds a color picker, a paint bucket and undo/redo (Ctrl+Z / Ctrl+Y).",
 		tutorial_step_colors_title:    "Colors",
 		tutorial_step_colors_body:     "Every room uses a 3-color palette. Edit colors here with the Tuxedo color picker.",
+		tutorial_step_tools_check_title:     "Tools button",
+		tutorial_step_tools_check_body:      "Click this button to show or hide the tools bar.",
+		tutorial_step_tools_overview_title:  "Tools",
+		tutorial_step_tools_overview_body:   "These are the tools. You can enable and disable panels with a click.",
 		tutorial_step_dialog_title:    "Dialog",
 		tutorial_step_dialog_body:     "Give sprites something to say. Select a sprite and write its lines in this editor.",
 		tutorial_step_exits_title:     "Exits & endings",
@@ -69,6 +73,16 @@ var TutorialTour = (function () {
 			return localization.GetStringOrFallback(id, fallbacks[id] || id);
 		}
 		return fallbacks[id] || id;
+	}
+
+	// toolbar helpers (toolsPanel uses toggleToolBar, not showPanel/hidePanel)
+	function showToolBar() {
+		document.getElementById("toolsPanel").style.display = "flex";
+		document.getElementById("appRoot").classList.add("bitsy-toolbar-open");
+	}
+	function hideToolBar() {
+		document.getElementById("toolsPanel").style.display = "none";
+		document.getElementById("appRoot").classList.remove("bitsy-toolbar-open");
 	}
 
 	// some helpers
@@ -408,8 +422,12 @@ var TutorialTour = (function () {
 		// ensureVisible
 		if (step.ensureVisible) {
 			var panel = document.getElementById(step.ensureVisible);
-			if (panel && panel.style.display === "none") {
-				showPanel(step.ensureVisible);
+			if (panel && window.getComputedStyle(panel).display === "none") {
+				if (step.ensureVisible === "toolsPanel") {
+					showToolBar();
+				} else {
+					showPanel(step.ensureVisible);
+				}
 				openedPanels.push(step.ensureVisible);
 				var tid = setTimeout(function () {
 					if (goToToken !== token) return;
@@ -548,7 +566,11 @@ var TutorialTour = (function () {
 			var pid = openedPanels[i];
 			var p = document.getElementById(pid);
 			if (p && p.style.display !== "none") {
-				hidePanel(pid);
+				if (pid === "toolsPanel") {
+					hideToolBar();
+				} else {
+					hidePanel(pid);
+				}
 			}
 		}
 
