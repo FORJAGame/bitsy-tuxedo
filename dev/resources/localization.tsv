@@ -284,3 +284,32 @@ setting_text_hirez	default			predeterminado		сглаженный									domyś
 setting_text_lorez	chunky			grueso		рубленный									duży					
 find_tool	find			buscar		поиск								查找	szukaj					
 find_all	all			todo		найти все								所有	wszystkie					todos
+tutorial_replay	tutorial		tutorial																	tutorial
+tutorial_start	Start		Começar																	Começar
+tutorial_skip	No thanks		Agora não																	Agora não
+tutorial_back	Back		Voltar																	Voltar
+tutorial_next	Next		Próximo																	Próximo
+tutorial_quit	Quit		Sair																	Sair
+tutorial_finish	Finish		Concluir																	Concluir
+tutorial_step_welcome_title	Welcome to Bitsy Tuxedo!		Bem-vindo ao Bitsy Tuxedo!																	Bem-vindo ao Bitsy Tuxedo!
+tutorial_step_welcome_body	Hi, I'm Jiji! Want a quick tour of the editor? It takes about a minute.		Oi, eu sou o Jiji! Quer um tour rápido pelo editor? Leva cerca de um minuto.																	Oi, eu sou o Jiji! Quer um tour rápido pelo editor? Leva cerca de um minuto.
+tutorial_step_room_title	The room		A sala																	A sala
+tutorial_step_room_body	This grid is your world. Pick something in the Paint tool, then click a cell here to place it.		Esta grade é o seu mundo. Escolha algo na ferramenta Desenho e clique numa célula aqui para colocá-lo.																	Esta grade é o seu mundo. Escolha algo na ferramenta Desenho e clique numa célula aqui para colocá-lo.
+tutorial_step_paint_title	Paint tool		Ferramenta de desenho																	Ferramenta de desenho
+tutorial_step_paint_body	Draw tiles, sprites, items and your avatar. Tuxedo adds a color picker, a paint bucket and undo/redo (Ctrl+Z / Ctrl+Y).		Desenhe tiles, sprites, itens e o seu avatar. O Tuxedo adiciona seletor de cor, balde de tinta e desfazer/refazer (Ctrl+Z / Ctrl+Y).																	Desenhe tiles, sprites, itens e o seu avatar. O Tuxedo adiciona seletor de cor, balde de tinta e desfazer/refazer (Ctrl+Z / Ctrl+Y).
+tutorial_step_colors_title	Colors		Cores																	Cores
+tutorial_step_colors_body	Every room uses a 3-color palette. Edit colors here with the Tuxedo color picker.		Cada sala usa uma paleta de 3 cores. Edite as cores aqui com o seletor de cor do Tuxedo.																	Cada sala usa uma paleta de 3 cores. Edite as cores aqui com o seletor de cor do Tuxedo.
+tutorial_step_dialog_title	Dialog		Diálogo																	Diálogo
+tutorial_step_dialog_body	Give sprites something to say. Select a sprite and write its lines in this editor.		Dê algo para os sprites dizerem. Selecione um sprite e escreva as falas dele neste editor.																	Dê algo para os sprites dizerem. Selecione um sprite e escreva as falas dele neste editor.
+tutorial_step_exits_title	Exits & endings		Saídas e finais																	Saídas e finais
+tutorial_step_exits_body	Connect rooms with exits so the player can move between them, and place endings to finish the game.		Conecte salas com saídas para o jogador transitar entre elas, e coloque finais para encerrar o jogo.																	Conecte salas com saídas para o jogador transitar entre elas, e coloque finais para encerrar o jogo.
+tutorial_step_inventory_title	Inventory		Inventário																	Inventário
+tutorial_step_inventory_body	Track collectible items and game variables the player picks up or changes during play.		Acompanhe itens colecionáveis e variáveis do jogo que o jogador pega ou altera durante a partida.																	Acompanhe itens colecionáveis e variáveis do jogo que o jogador pega ou altera durante a partida.
+tutorial_step_play_title	Play		Jogar																	Jogar
+tutorial_step_play_body	Press Play any time to test your game. Press it again to go back to editing.		Aperte Jogar quando quiser para testar o jogo. Aperte de novo para voltar a editar.																	Aperte Jogar quando quiser para testar o jogo. Aperte de novo para voltar a editar.
+tutorial_step_download_title	Download		Baixar																	Baixar
+tutorial_step_download_body	Export your finished game as a single .html file you can share or upload anywhere.		Exporte o jogo pronto como um único arquivo .html para compartilhar ou publicar onde quiser.																	Exporte o jogo pronto como um único arquivo .html para compartilhar ou publicar onde quiser.
+tutorial_step_themes_title	Themes & language		Temas e idioma																	Temas e idioma
+tutorial_step_themes_body	Switch to dark mode, pick a custom theme, or change the editor language here.		Ative o modo escuro, escolha um tema personalizado ou mude o idioma do editor aqui.																	Ative o modo escuro, escolha um tema personalizado ou mude o idioma do editor aqui.
+tutorial_step_done_title	You're set!		Tudo pronto!																	Tudo pronto!
+tutorial_step_done_body	That's the tour. Reopen it any time from the "tutorial" button in the top bar. Have fun making things!		Esse foi o tour. Reabra quando quiser pelo botão "tutorial" na barra superior. Divirta-se criando!																	Esse foi o tour. Reabra quando quiser pelo botão "tutorial" na barra superior. Divirta-se criando!
