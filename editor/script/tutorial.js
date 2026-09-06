@@ -21,6 +21,7 @@ var TutorialTour = (function () {
 	var openedPanels  = [];      // panels the tour opened
 	var overlay       = null;    // #tutorialOverlay
 	var currentEl     = null;    // target element of current step
+	var spotlightPrimed = false; // A1: keep spotlight transitions off until the first real target is painted
 
 	// cached DOM refs (filled in start)
 	var spotlight, card, arrow, mascot, titleEl, bodyEl, progressEl, backBtn, quitBtn, nextBtn;
@@ -120,6 +121,39 @@ var TutorialTour = (function () {
 			}
 		}
 		return el;
+	}
+
+	// C1: only scroll when the target isn't already within the viewport
+	function targetNeedsScroll(el) {
+		var r = el.getBoundingClientRect();
+		var vw = window.innerWidth;
+		var vh = window.innerHeight;
+		// larger than the viewport: only scroll if its start edge is off-screen
+		if (r.width > vw || r.height > vh) {
+			return r.top < 0 || r.left < 0;
+		}
+		return r.top < 0 || r.left < 0 || r.bottom > vh || r.right > vw;
+	}
+
+	// A1/B2: write spotlight geometry. Until the first real target is painted the
+	// write is snapped (transition disabled) so the spotlight never "wipes" in from
+	// the corner; center steps pass a 0x0 hole, i.e. full-screen dim only, so the
+	// dim is already present when the first targeted step arrives.
+	function setSpotlight(x, y, w, h, isRealTarget) {
+		spotlight.style.display = "block";
+		var snap = !spotlightPrimed;
+		if (snap) spotlight.classList.add("tutorial-no-anim");
+		spotlight.style.left   = x + "px";
+		spotlight.style.top    = y + "px";
+		spotlight.style.width  = w + "px";
+		spotlight.style.height = h + "px";
+		if (snap) {
+			void spotlight.offsetWidth; // flush so the values apply without animating
+			requestAnimationFrame(function () {
+				if (spotlight) spotlight.classList.remove("tutorial-no-anim");
+			});
+			if (isRealTarget) spotlightPrimed = true;
+		}
 	}
 
 	function shouldAutoStart(opts) {
@@ -252,16 +286,18 @@ var TutorialTour = (function () {
 		var hasTarget = !!el;
 		var centerMode = !hasTarget || step.placement === "center" || mobile;
 
-		// spotlight
+		// spotlight (B2: center steps still paint the full-screen dim, via a 0x0 hole)
 		if (hasTarget && !centerMode) {
-			spotlight.style.display = "block";
 			var r = el.getBoundingClientRect();
-			spotlight.style.left   = (r.left - SPOTLIGHT_PADDING) + "px";
-			spotlight.style.top    = (r.top - SPOTLIGHT_PADDING) + "px";
-			spotlight.style.width  = (r.width + 2 * SPOTLIGHT_PADDING) + "px";
-			spotlight.style.height = (r.height + 2 * SPOTLIGHT_PADDING) + "px";
+			setSpotlight(
+				r.left - SPOTLIGHT_PADDING,
+				r.top - SPOTLIGHT_PADDING,
+				r.width + 2 * SPOTLIGHT_PADDING,
+				r.height + 2 * SPOTLIGHT_PADDING,
+				true
+			);
 		} else {
-			spotlight.style.display = "none";
+			setSpotlight(window.innerWidth / 2, window.innerHeight / 2, 0, 0, false);
 		}
 
 		// card
@@ -445,7 +481,7 @@ var TutorialTour = (function () {
 		// resolve target
 		currentEl = getLocTarget(step);
 
-		if (currentEl && step.placement !== "center" && !isMobile()) {
+		if (currentEl && step.placement !== "center" && !isMobile() && targetNeedsScroll(currentEl)) {
 			currentEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
 			var tid = setTimeout(function () {
 				if (goToToken !== token) return;
@@ -538,6 +574,7 @@ var TutorialTour = (function () {
 
 		active = true;
 		openedPanels = [];
+		spotlightPrimed = false;
 		buildOverlay();
 
 		// keyboard handler

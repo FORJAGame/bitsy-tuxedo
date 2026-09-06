@@ -18,6 +18,11 @@ html.dark-mode #tutorialSpotlight {
 	box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65);
 }
 
+/* A1: first paint / first real target is snapped, no wipe-in from the corner */
+#tutorialSpotlight.tutorial-no-anim {
+	transition: none;
+}
+
 #tutorialCard {
 	position: fixed;
 	pointer-events: auto;
