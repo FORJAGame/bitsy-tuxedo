@@ -24,7 +24,7 @@ var TutorialTour = (function () {
 	var spotlightPrimed = false; // A1: keep spotlight transitions off until the first real target is painted
 
 	// cached DOM refs (filled in start)
-	var spotlight, card, arrow, mascot, titleEl, bodyEl, progressEl, backBtn, quitBtn, nextBtn;
+	var spotlight, card, cardInner, arrow, mascot, titleEl, bodyEl, progressEl, backBtn, quitBtn, nextBtn;
 
 	// handler refs (so we can remove exactly these)
 	var onResize       = null;
@@ -42,7 +42,7 @@ var TutorialTour = (function () {
 		tutorial_quit:                 "Quit",
 		tutorial_finish:               "Finish",
 		tutorial_step_welcome_title:   "Welcome to Bitsy Tuxedo!",
-		tutorial_step_welcome_body:    "Hi, I'm Jiji! Want a quick tour of the editor? It takes about a minute.",
+		tutorial_step_welcome_body:    "Hi, I'm Mazela! Want a quick tour of the editor? It takes about a minute.",
 		tutorial_step_room_title:      "The room",
 		tutorial_step_room_body:       "This grid is your world. Pick something in the Paint tool, then click a cell here to place it.",
 		tutorial_step_paint_title:     "Paint tool",
@@ -184,7 +184,7 @@ var TutorialTour = (function () {
 		mascot = document.createElement("img");
 		mascot.id = "tutorialMascot";
 		mascot.alt = "";
-		mascot.src = "image/cat.png";
+		mascot.src = "image/mazela.svg";
 
 		arrow = document.createElement("div");
 		arrow.id = "tutorialCardArrow";
@@ -221,11 +221,17 @@ var TutorialTour = (function () {
 		footer.appendChild(quitBtn);
 		footer.appendChild(nextBtn);
 
+		// cardInner holds the per-step content and carries the drop animation, so
+		// the mascot (a direct child of card) is not squashed/stretched with it.
+		cardInner = document.createElement("div");
+		cardInner.id = "tutorialCardInner";
+		cardInner.appendChild(titleEl);
+		cardInner.appendChild(bodyEl);
+		cardInner.appendChild(footer);
+
 		card.appendChild(mascot);
 		card.appendChild(arrow);
-		card.appendChild(titleEl);
-		card.appendChild(bodyEl);
-		card.appendChild(footer);
+		card.appendChild(cardInner);
 
 		overlay.appendChild(spotlight);
 		overlay.appendChild(card);
@@ -259,7 +265,7 @@ var TutorialTour = (function () {
 			nextBtn.textContent = loc("tutorial_next");
 		}
 
-		// mascot pose (vai funcionar pro mazela tbm?)
+		// mascot pose (Mazela)
 		mascot.hidden = false;
 		mascot.className = "";
 		if (step.mascot === "center")      mascot.className = "pose-center";
@@ -267,11 +273,11 @@ var TutorialTour = (function () {
 		else if (step.mascot === "right")  mascot.className = "pose-right";
 		else if (step.mascot === "none")   mascot.hidden = true;
 
-		// drop animation on card
-		card.style.animation = "none";
+		// entrance animation on the inner content only (keeps the mascot steady)
+		cardInner.style.animation = "none";
 		// force reflow to restart animation
-		void card.offsetWidth;
-		card.style.animation = "dropAnim 0.3s";
+		void cardInner.offsetWidth;
+		cardInner.style.animation = "tutorialContentIn 0.3s ease-out";
 
 		// position spotlight + card
 		renderSpotlightAndCard();
@@ -618,6 +624,7 @@ var TutorialTour = (function () {
 		overlay = null;
 		spotlight = null;
 		card = null;
+		cardInner = null;
 		arrow = null;
 		mascot = null;
 

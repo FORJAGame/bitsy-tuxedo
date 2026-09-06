@@ -40,6 +40,15 @@ html.dark-mode #tutorialSpotlight {
 	display: none !important;
 }
 
+#tutorialCardInner {
+	animation: tutorialContentIn 0.3s ease-out;
+}
+
+@keyframes tutorialContentIn {
+	from { opacity: 0; transform: translateY(-12px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
 #tutorialCardTitle {
 	font-weight: 700;
 	margin: 0 0 var(--bitsy-space-m);
@@ -125,32 +134,45 @@ html.dark-mode #tutorialSpotlight {
 
 #tutorialMascot {
 	position: absolute;
-	width: 64px;
-	height: auto;
+	box-sizing: border-box;
+	width: 60px;
+	height: 60px;
+	padding: 9px;
+	background: hsl(var(--bitsy-tint-h), 68%, 60%);
+	border: var(--bitsy-space-xs) solid var(--bitsy-color-main-1);
+	border-radius: 50%;
+	object-fit: contain;
 	image-rendering: pixelated;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 	pointer-events: none;
 	user-select: none;
 }
 
+html.dark-mode #tutorialMascot {
+	background: hsl(var(--bitsy-tint-h), 55%, 58%);
+}
+
 #tutorialMascot.pose-center {
 	left: 50%;
-	top: -72px;
-	transform: translateX(-50%) scale(1.4);
+	top: -60px;
+	transform: translateX(-50%) scale(1.25);
 	transform-origin: bottom center;
+	animation: mascotBob 2.6s ease-in-out infinite;
 }
 
 #tutorialMascot.pose-right {
-	right: -8px;
-	top: -40px;
-	transform: rotate(6deg);
-	z-index: -1;
+	right: -10px;
+	top: -52px;
 }
 
 #tutorialMascot.pose-left {
-	left: -8px;
-	top: -40px;
-	transform: rotate(-6deg) scaleX(-1);
-	z-index: -1;
+	left: -10px;
+	top: -52px;
+}
+
+@keyframes mascotBob {
+	0%, 100% { transform: translateX(-50%) scale(1.25) translateY(0); }
+	50%      { transform: translateX(-50%) scale(1.25) translateY(-4px); }
 }
 
 @media (max-aspect-ratio: 3/4) {
@@ -176,7 +198,9 @@ html.dark-mode #tutorialSpotlight {
 		transition: none;
 	}
 
-	#tutorialCard {
+	#tutorialCard,
+	#tutorialCardInner,
+	#tutorialMascot.pose-center {
 		animation: none !important;
 	}
 }
