@@ -1169,6 +1169,11 @@ function start() {
 			editorContent.insertBefore( panelElement, null ); //insert on the left
 		}
 	}
+
+	// interactive tutorial (tour)
+	if (window.TutorialTour) {
+		TutorialTour.init({ isFreshGame: !gamedataStorage });
+	}
 }
 
 function newDrawing() {
