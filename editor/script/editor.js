@@ -687,16 +687,28 @@ function resetGameData() {
 	markerTool.Clear(); // hacky -- should combine more of this stuff together
 	markerTool.Refresh();
 
-	roomTool.selectAtIndex(0);
-	tuneTool.selectAtIndex(0);
-	blipTool.selectAtIndex(0);
+	// resetGameData() also runs on the fresh-game load path (start()), before
+	// these tools are created; guard like on_game_data_change_core() does.
+	if (roomTool) {
+		roomTool.selectAtIndex(0);
+	}
+	if (tuneTool) {
+		tuneTool.selectAtIndex(0);
+	}
+	if (blipTool) {
+		blipTool.selectAtIndex(0);
+	}
 
 	events.Raise("game_data_change"); // TODO -- does this need to have a specific reset event or flag?
 
-	// reset find tool (a bit heavy handed?)
-	findTool = new FindTool({
-		mainElement : document.getElementById("findPanelMain"),
-	});
+	// reset find tool (maybe too much)
+	// skip on the fresh-game load path: paletteTool doesn't exist yet and
+	// start() builds the real findTool right after.
+	if (paletteTool) {
+		findTool = new FindTool({
+			mainElement : document.getElementById("findPanelMain"),
+		});
+	}
 }
 
 function refreshGameData() {
