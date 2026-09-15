@@ -335,7 +335,7 @@ var TutorialTour = (function () {
 
 		var el = currentEl;
 		var mobile = isMobile();
-		var hasTarget = !!el;
+		var hasTarget = !!el && el.isConnected;
 		var centerMode = !hasTarget || step.placement === "center" || mobile;
 
 		// spotlight (B2: center steps still paint the full-screen dim, via a 0x0 hole)
