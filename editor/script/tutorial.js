@@ -533,7 +533,7 @@ var TutorialTour = (function () {
 		// resolve target
 		currentEl = getLocTarget(step);
 
-		if (currentEl && step.placement !== "center" && !isMobile() && targetNeedsScroll(currentEl)) {
+		if (currentEl && step.placement !== "center" && targetNeedsScroll(currentEl)) {
 			currentEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
 			var tid = setTimeout(function () {
 				if (goToToken !== token) return;
@@ -583,17 +583,19 @@ var TutorialTour = (function () {
 
 		if (isInput) return;
 
-		// Don't double-fire when a tour button has focus (Enter synthesizes a click)
-		var ae = document.activeElement;
-		var isTourBtn = ae && (ae === backBtn || ae === quitBtn || ae === nextBtn);
-		if (isTourBtn) return;
-
-		if (e.key === "ArrowRight" || e.key === "Enter") {
+		if (e.key === "ArrowRight") {
 			e.preventDefault();
 			next();
 		} else if (e.key === "ArrowLeft") {
 			e.preventDefault();
 			prev();
+		} else if (e.key === "Enter") {
+			// Don't double-fire when a tour button has focus (Enter synthesizes a click)
+			var ae = document.activeElement;
+			var isTourBtn = ae && (ae === backBtn || ae === quitBtn || ae === nextBtn);
+			if (isTourBtn) return;
+			e.preventDefault();
+			next();
 		}
 	}
 
