@@ -307,6 +307,8 @@ var TutorialTour = (function () {
 		// next button label
 		if (currentIndex === TUTORIAL_STEPS.length - 1) {
 			nextBtn.textContent = loc("tutorial_finish");
+		} else if (currentIndex === 0) {
+			nextBtn.textContent = loc("tutorial_start");
 		} else {
 			nextBtn.textContent = loc("tutorial_next");
 		}
