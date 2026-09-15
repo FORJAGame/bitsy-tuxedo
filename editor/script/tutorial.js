@@ -9,6 +9,7 @@ var TutorialTour = (function () {
 	var CARD_GAP          = 12;
 	var VIEWPORT_MARGIN   = 8;
 	var PANEL_ANIM_MS     = 450;
+	var PANEL_HIDE_MS     = 400; // mirrors hidePanel()'s own close animation delay
 	var SCROLL_SETTLE_MS  = 350;
 	var MOBILE_MEDIA      = "(max-aspect-ratio: 3/4)";
 
@@ -19,6 +20,7 @@ var TutorialTour = (function () {
 	var rafId         = null;
 	var timerIds      = [];      // pending setTimeout ids
 	var openedPanels  = [];      // panels the tour opened
+	var pendingHideTimers = {};  // panel id -> setTimeout id, for hidePanelForTour() in flight
 	var overlay       = null;    // #tutorialOverlay
 	var currentEl     = null;    // target element of current step
 	var spotlightPrimed = false; // A1: keep spotlight transitions off until the first real target is painted
@@ -84,6 +86,50 @@ var TutorialTour = (function () {
 	function hideToolBar() {
 		document.getElementById("toolsPanel").style.display = "none";
 		document.getElementById("appRoot").classList.remove("bitsy-toolbar-open");
+	}
+
+	// panel helpers for the tour: same effect as showPanel()/hidePanel() in
+	// editor.js, but with doUpdatePrefs=false so opening/closing a panel for the
+	// tour never overwrites the user's saved panel_prefs layout, and with the
+	// close animation's setTimeout tracked in pendingHideTimers so a start()
+	// shortly after a stop() can cancel it before it closes a panel the new run
+	// just opened.
+	function showPanelForTour(id, insertNextToId) {
+		var tid = pendingHideTimers[id];
+		if (tid) {
+			clearTimeout(tid);
+			delete pendingHideTimers[id];
+			var panelEl = document.getElementById(id);
+			if (panelEl) panelEl.classList.remove("close");
+		}
+		togglePanelCore(id, true /*visible*/, false /*doUpdatePrefs*/, insertNextToId);
+	}
+
+	function hidePanelForTour(id) {
+		var panelEl = document.getElementById(id);
+		var toolsLabel = document.getElementById("toolsCheckLabel");
+		if (panelEl) panelEl.classList.add("close");
+		if (toolsLabel) toolsLabel.classList.add("flash");
+
+		var tid = setTimeout(function () {
+			delete pendingHideTimers[id];
+			togglePanelCore(id, false /*visible*/, false /*doUpdatePrefs*/);
+			if (panelEl) panelEl.classList.remove("close");
+			if (toolsLabel) toolsLabel.classList.remove("flash");
+		}, PANEL_HIDE_MS);
+		pendingHideTimers[id] = tid;
+	}
+
+	function clearPendingHideTimers() {
+		for (var id in pendingHideTimers) {
+			if (!pendingHideTimers.hasOwnProperty(id)) continue;
+			clearTimeout(pendingHideTimers[id]);
+			var panelEl = document.getElementById(id);
+			if (panelEl) panelEl.classList.remove("close");
+		}
+		pendingHideTimers = {};
+		var toolsLabel = document.getElementById("toolsCheckLabel");
+		if (toolsLabel) toolsLabel.classList.remove("flash");
 	}
 
 	// some helpers
@@ -468,7 +514,7 @@ var TutorialTour = (function () {
 				if (step.ensureVisible === "toolsPanel") {
 					showToolBar();
 				} else {
-					showPanel(step.ensureVisible);
+					showPanelForTour(step.ensureVisible);
 				}
 				openedPanels.push(step.ensureVisible);
 				var tid = setTimeout(function () {
@@ -578,6 +624,8 @@ var TutorialTour = (function () {
 		if (active) return;
 		if (typeof fromIndex === "undefined") fromIndex = 0;
 
+		clearPendingHideTimers();
+
 		active = true;
 		openedPanels = [];
 		spotlightPrimed = false;
@@ -612,7 +660,7 @@ var TutorialTour = (function () {
 				if (pid === "toolsPanel") {
 					hideToolBar();
 				} else {
-					hidePanel(pid);
+					hidePanelForTour(pid);
 				}
 			}
 		}
