@@ -24,6 +24,7 @@
 		<link rel="stylesheet" type="text/css" href="style/gifToolStyle.css">
 		<link rel="stylesheet" type="text/css" href="style/paintToolStyle.css">
 		<link rel="stylesheet" type="text/css" href="style/settingsToolStyle.css">
+		<link rel="stylesheet" type="text/css" href="style/tutorialStyle.css">
 
 		<!-- GENERATED -->
 		<script src="script/generated/resources.js"></script>
@@ -65,6 +66,8 @@
 		<script src="script/editor.js"></script>
 		<script src="script/importer.js"></script>
 		<script src="script/inventory.js"></script>
+		<script src="script/tutorial_steps.js"></script>
+		<script src="script/tutorial.js"></script>
 
 		<!-- TOOLS -->
 		<script src="script/tools/room.js"></script>
@@ -115,6 +118,12 @@
 					<label title="Documentation" class="bitsy-menu-label" onclick="window.open('https://github.com/FORJAGame/bitsy-tuxedo/wiki');" style="cursor: pointer;">
 						<span class="bitsy_icon">about</span>
 						<span>docs</span>
+					</label>
+
+					<!-- tutorial -->
+					<label id="tutorialReplayButton" class="bitsy-menu-label" data-localize-title="tutorial_replay" style="cursor: pointer;">
+						<span class="bitsy_icon">help</span>
+						<span class="localize tutorial_replay">tutorial</span>
 					</label>
 
 				</div>

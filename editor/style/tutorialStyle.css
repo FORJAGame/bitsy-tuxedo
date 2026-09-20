@@ -1,0 +1,206 @@
+#tutorialOverlay {
+	position: fixed;
+	inset: 0;
+	z-index: 10000;
+	pointer-events: none;
+}
+
+#tutorialSpotlight {
+	position: fixed;
+	border-radius: var(--bitsy-space-s);
+	box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
+	transition: left 0.2s ease, top 0.2s ease, width 0.2s ease, height 0.2s ease;
+	pointer-events: none;
+	display: none;
+}
+
+html.dark-mode #tutorialSpotlight {
+	box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65);
+}
+
+/* A1: first paint / first real target is snapped, no wipe-in from the corner */
+#tutorialSpotlight.tutorial-no-anim {
+	transition: none;
+}
+
+#tutorialCard {
+	position: fixed;
+	pointer-events: auto;
+	box-sizing: border-box;
+	max-width: min(92vw, 22rem);
+	padding: var(--bitsy-space-l);
+	background: var(--bitsy-color-main-1);
+	color: var(--bitsy-color-main-2);
+	border-radius: var(--bitsy-space-s);
+	border-bottom: solid var(--bitsy-space-xs) var(--bitsy-color-main-2);
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+#tutorialCard [hidden] {
+	display: none !important;
+}
+
+#tutorialCardInner {
+	animation: tutorialContentIn 0.3s ease-out;
+}
+
+@keyframes tutorialContentIn {
+	from { opacity: 0; transform: translateY(-12px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+#tutorialCardTitle {
+	font-weight: 700;
+	margin: 0 0 var(--bitsy-space-m);
+	font-size: 1.1rem;
+}
+
+#tutorialCardBody {
+	margin: 0 0 var(--bitsy-space-l);
+	line-height: 1.4;
+}
+
+#tutorialCardFooter {
+	display: flex;
+	align-items: center;
+	gap: var(--bitsy-space-s);
+}
+
+#tutorialProgress {
+	margin-right: auto;
+	font-size: 0.85rem;
+	opacity: 0.7;
+}
+
+#tutorialCard button {
+	background: var(--bitsy-color-accent-2);
+	color: inherit;
+	padding: var(--bitsy-space-s) var(--bitsy-space-m);
+	border: none;
+	border-radius: var(--bitsy-space-s);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 0.9rem;
+}
+
+#tutorialNextBtn {
+	background: var(--bitsy-color-main-2);
+	color: var(--bitsy-color-main-1);
+}
+
+#tutorialCard button:hover {
+	opacity: 0.85;
+}
+
+#tutorialCardArrow {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	display: none;
+}
+
+#tutorialCardArrow.arrow-top {
+	display: block;
+	top: -20px;
+	left: 20px;
+	border-bottom-color: var(--bitsy-color-main-1);
+	border-top: none;
+}
+
+#tutorialCardArrow.arrow-bottom {
+	display: block;
+	bottom: -20px;
+	left: 20px;
+	border-top-color: var(--bitsy-color-main-1);
+	border-bottom: none;
+}
+
+#tutorialCardArrow.arrow-left {
+	display: block;
+	left: -20px;
+	top: 20px;
+	border-right-color: var(--bitsy-color-main-1);
+	border-left: none;
+}
+
+#tutorialCardArrow.arrow-right {
+	display: block;
+	right: -20px;
+	top: 20px;
+	border-left-color: var(--bitsy-color-main-1);
+	border-right: none;
+}
+
+#tutorialMascot {
+	position: absolute;
+	box-sizing: border-box;
+	width: 60px;
+	height: 60px;
+	padding: 9px;
+	background: hsl(var(--bitsy-tint-h), 68%, 60%);
+	border: var(--bitsy-space-xs) solid var(--bitsy-color-main-1);
+	border-radius: 50%;
+	object-fit: contain;
+	image-rendering: pixelated;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+	pointer-events: none;
+	user-select: none;
+}
+
+html.dark-mode #tutorialMascot {
+	background: hsl(var(--bitsy-tint-h), 55%, 58%);
+}
+
+#tutorialMascot.pose-center {
+	left: 50%;
+	top: -60px;
+	transform: translateX(-50%) scale(1.25);
+	transform-origin: bottom center;
+	animation: mascotBob 2.6s ease-in-out infinite;
+}
+
+#tutorialMascot.pose-right {
+	right: -10px;
+	top: -52px;
+}
+
+#tutorialMascot.pose-left {
+	left: -10px;
+	top: -52px;
+}
+
+@keyframes mascotBob {
+	0%, 100% { transform: translateX(-50%) scale(1.25) translateY(0); }
+	50%      { transform: translateX(-50%) scale(1.25) translateY(-4px); }
+}
+
+@media (max-aspect-ratio: 3/4) {
+	#tutorialSpotlight {
+		display: none !important;
+	}
+
+	#tutorialCard {
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		max-width: 92vw;
+	}
+
+	#tutorialCardArrow {
+		display: none !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#tutorialSpotlight {
+		transition: none;
+	}
+
+	#tutorialCard,
+	#tutorialCardInner,
+	#tutorialMascot.pose-center {
+		animation: none !important;
+	}
+}
