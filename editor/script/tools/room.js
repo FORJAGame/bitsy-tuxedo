@@ -722,6 +722,33 @@ function makeRoomTool() {
 			forceRedraw = true;
 		};
 
+		// tile images bake in RGB when rendered, so palette edits need to
+		// re-send the colors (initRoom) and clear the render cache
+		function refreshRoomColors() {
+			if (isPlayMode || room[selectedId] === undefined) {
+				return;
+			}
+
+			// events fire outside the room's loop, so the global system
+			// isn't ours here -- point it at the room's system while we write
+			var prevSystem = bitsy;
+			bitsy = tool.system; // hack to force correct system
+			initRoom(selectedId);
+			bitsy = prevSystem;
+
+			forceRedraw = true;
+		}
+
+		events.Listen("palette_preview", refreshRoomColors);
+
+		events.Listen("palette_change", function() {
+			refreshRoomColors();
+
+			if (findTool) {
+				findTool.updateThumbnails();
+			}
+		});
+
 		tool.add = function() {
 			var nextId = nextObjectId(sortedBase36IdList(room));
 			room[nextId] = createRoomData(nextId);
