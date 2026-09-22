@@ -196,6 +196,9 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 
 		updateColorPickerLabel(colorPickerIndex, event.rgbColor.r, event.rgbColor.g, event.rgbColor.b );
 
+		// lightweight live update while dragging (no save, no thumbnails)
+		events.Raise("palette_preview");
+
 		if( event.isMouseUp && !events.IsEventActive("game_data_change") ) {
 			events.Raise("palette_change"); // TODO -- try including isMouseUp and see if we can update more stuff live
 		}
