@@ -40,10 +40,14 @@ jobs:
           MINOR=$(grep -oP '(?<=minor: )\d+' ./editor/script/engine/bitsy.js)
           echo "current-version=${MAJOR}.${MINOR}" >> "$GITHUB_OUTPUT"
 
+      - name: Gerar manifesto OTA
+        run: node ./dev/ota_manifest.js ./editor
+
       - name: Verificar artefatos do build
         run: |
           test -f editor/index.html || (echo "editor/index.html não encontrado" && exit 1)
           test -f editor/script/generated/resources.js || (echo "resources.js não foi gerado" && exit 1)
+          test -f editor/ota-manifest.json || (echo "ota-manifest.json não foi gerado" && exit 1)
           echo "Build OK — versão ${{ steps.version.outputs.current-version }}"
 
       # ---------- deploy ----------
@@ -83,5 +87,7 @@ jobs:
                    --exclude-glob .well-known/ \
                    --exclude-glob cgi-bin/ \
                    --exclude-glob .htaccess \
+                   --exclude-glob ota-manifest.json \
                    ./editor/ ${{ env.REMOTE_DIR }};
+            put -O ${{ env.REMOTE_DIR }} ./editor/ota-manifest.json;
           "
