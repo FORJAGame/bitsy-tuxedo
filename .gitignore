@@ -19,4 +19,8 @@ experiments/node_modules/*
 .vs/bitsy/v16/.suo
 .vs/bitsy/v15/.suo
 .vs/config/applicationhost.config
+app/seed/
+app/build/
+app/dist/
+app/node_modules/
 editor/ota-manifest.json
