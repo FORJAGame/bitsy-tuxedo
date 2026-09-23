@@ -285,6 +285,7 @@ setting_text_lorez	chunky			grueso		рубленный									duży
 find_tool	find			buscar		поиск								查找	szukaj					
 find_all	all			todo		найти все								所有	wszystkie					todos
 tutorial_replay	tutorial		tutorial																	tutorial
+download_app	get app		baixar app	descargar app
 tutorial_start	Start		Começar																	Começar
 tutorial_skip	No thanks		Agora não																	Agora não
 tutorial_back	Back		Voltar																	Voltar
