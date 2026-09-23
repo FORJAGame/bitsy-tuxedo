@@ -1,0 +1,47 @@
+name: app-release
+
+# The tag must match app/package.json's version (e.g. tag v0.1.0 for
+# "version": "0.1.0"): electron-updater reads the latest release from it.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: --linux
+          - os: windows-latest
+            target: --win
+          - os: macos-latest
+            target: --mac
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        working-directory: app
+        run: npm install --no-audit --no-fund
+
+      - name: Preparar seed do editor
+        working-directory: app
+        run: node scripts/prepare-seed.js
+
+      - name: Empacotar e publicar
+        working-directory: app
+        run: npx electron-builder ${{ matrix.target }} --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # unsigned build
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
