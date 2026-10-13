@@ -711,6 +711,23 @@ function resetGameData() {
 	}
 }
 
+var AUTOSAVE_DEBOUNCE_MS = 750;
+var autosaveTimeoutId = null;
+var pendingAutosaveData = null;
+
+function flushAutosave() {
+	if (autosaveTimeoutId !== null) {
+		clearTimeout(autosaveTimeoutId);
+		autosaveTimeoutId = null;
+	}
+	if (pendingAutosaveData !== null) {
+		Store.set("game_data", pendingAutosaveData);
+		pendingAutosaveData = null;
+	}
+}
+
+window.addEventListener("beforeunload", flushAutosave);
+
 function refreshGameData() {
 	if (isPlayMode) {
 		return; //never store game data while in playmode (TODO: wouldn't be necessary if the game data was decoupled form editor data)
@@ -728,7 +745,14 @@ function refreshGameData() {
 
 	// Store.set("game_data", gameData); //auto-save
 
-	Store.set("game_data", gameDataNoFonts);
+	// localStorage.setItem is synchronous and can take 1-2s on big games,
+	// freezing the UI on every single paint stroke -- debounce it so the
+	// expensive write only happens once editing settles down.
+	pendingAutosaveData = gameDataNoFonts;
+	if (autosaveTimeoutId !== null) {
+		clearTimeout(autosaveTimeoutId);
+	}
+	autosaveTimeoutId = setTimeout(flushAutosave, AUTOSAVE_DEBOUNCE_MS);
 }
 
 /* TIMER */
