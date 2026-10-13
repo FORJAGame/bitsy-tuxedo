@@ -134,8 +134,9 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 
 	// public
     function changeColorPickerIndex(index) {
-		colorPickerIndex = index;
-        var color = getPal(GetSelectedId())[index];
+        var colors = getPal(GetSelectedId());
+		colorPickerIndex = index = Math.min(index, colors.length - 1);
+        var color = colors[index];
         // bitsyLog(color, "editor");
         colorPicker.setColor(color[0], color[1], color[2]);
 
@@ -219,6 +220,7 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 	this.Select = function(id) {
 		curPaletteId = id;
 		UpdatePaletteUI();
+		events.Raise("palette_change");
 	};
 
 	function SelectPrev() {
@@ -233,6 +235,7 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 		curPaletteId = idList[index];
 
 		UpdatePaletteUI();
+		events.Raise("palette_change");
 	}
 	this.SelectPrev = SelectPrev;
 
@@ -248,6 +251,7 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 		curPaletteId = idList[index];
 
 		UpdatePaletteUI();
+		events.Raise("palette_change");
 	}
 
 	this.AddNew = function() {
@@ -272,9 +276,10 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 		curPaletteId = id;
 		UpdatePaletteUI();
 
+		events.Raise("palette_change");
 		events.Raise("palette_list_change");
 	}
-    
+
 	this.AddDuplicate = function() {
 		var sourcePalette = palette[curPaletteId] === undefined ? palette["default"] : palette[curPaletteId];
 		var curColors = sourcePalette.colors;
@@ -293,6 +298,7 @@ function PaletteTool(colorPicker,colorCallback,nameFieldId) { //,colorCallback
 		curPaletteId = id;
 		UpdatePaletteUI();
 
+		events.Raise("palette_change");
 		events.Raise("palette_list_change");
 	}
 
