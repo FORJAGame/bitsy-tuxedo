@@ -2957,12 +2957,13 @@ function addDrawingAnimation(drwId, frameData) {
 
 	if (!frameData) {
 		var firstFrame = drawingSource[0];
+		var frameTilesize = firstFrame.length;
 
 		// copy first frame data into second frame
 		frameData = [];
-		for (var y = 0; y < tilesize; y++) {
+		for (var y = 0; y < frameTilesize; y++) {
 			frameData.push([]);
-			for (var x = 0; x < tilesize; x++) {
+			for (var x = 0; x < frameTilesize; x++) {
 				frameData[y].push(firstFrame[y][x]);
 			}
 		}
