@@ -19,3 +19,8 @@ experiments/node_modules/*
 .vs/bitsy/v16/.suo
 .vs/bitsy/v15/.suo
 .vs/config/applicationhost.config
+
+# graphify local machine state
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/
